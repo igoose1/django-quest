@@ -9,6 +9,7 @@ verify_ssl = true
 django = "*"
 jinja2 = "*"
 ujson = "*"
+python-levenshtein = "*"
 
 [requires]
 python_version = "3.7"
