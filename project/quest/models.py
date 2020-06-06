@@ -1,4 +1,5 @@
 from django.db import models
+from django.core import signing
 
 from Levenshtein import distance
 
@@ -6,9 +7,21 @@ class Level(models.Model):
     depth = models.IntegerField(unique=True)
     content = models.TextField()
 
+    signer = signing.Signer(sep=':', salt='load')
+
     @property
     def content_length(self):
         return len(self.content)
+
+    def generate_signature(self):
+        return self.signer.signature(self.depth)
+
+    def is_signature_wrong(self, user_signature: str):
+        try:
+            self.signer.unsign(f'{self.depth}:{user_signature}')
+        except signing.BadSignature: 
+            return True
+        return False
 
     class Meta:
         ordering = ['depth']

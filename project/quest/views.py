@@ -1,3 +1,21 @@
 from django.shortcuts import render
+from django.http import HttpRequest
+from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.shortcuts import redirect
 
-# Create your views here.
+from quest.models import Level
+
+
+def load(request: HttpRequest, depth: int):
+    signature = request.GET.get('s', '')
+
+    level = Level.objects.filter(depth=depth)
+    if not level.exists():
+        return HttpResponseNotFound()
+
+    if level.get().is_signature_wrong(signature):
+        return HttpResponseForbidden('Bad signature.')
+
+    request.session['depth'] = depth
+    return redirect('view', depth=depth)
+
