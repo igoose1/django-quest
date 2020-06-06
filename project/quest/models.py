@@ -5,6 +5,7 @@ from Levenshtein import distance
 
 class Level(models.Model):
     depth = models.IntegerField(unique=True)
+    title = models.CharField(max_length=128)
     content = models.TextField()
 
     signer = signing.Signer(sep=':', salt='load')
