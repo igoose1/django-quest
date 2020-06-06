@@ -6,9 +6,7 @@ from django.shortcuts import redirect
 from quest.models import Level
 
 
-def load(request: HttpRequest, depth: int):
-    signature = request.GET.get('s', '')
-
+def load(request: HttpRequest, depth: int, signature: str):
     level = Level.objects.filter(depth=depth)
     if not level.exists():
         return HttpResponseNotFound()
