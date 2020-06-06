@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title|e }} {% endblock %}
+
+{% block content %}
+	<h1>{{ title|e }}</h1>
+
+	<div id="content"><p>{{ content }}</p></div>
+
+	<div id="code_input">
+		<input type="text" id="code" name="code" value="{{ code }}">
+		<input type="submit" value="Погняли!🚀">
+	</div>
+
+	<hr>
+	<div id="progress">
+		<p>Прогресс:
+		<ol>
+		{% for title in progress %}
+			<li><a href="../{{ loop.index }}">{{ title|e }}</a></li>
+		{% endfor %}
+		</ol>
+		</p>
+	</div>
+
+	<hr>
+	<div id="load">Волшебная <a href="{{ loadlink }}">ссылочка</a> для подзагрузки прогресса.</div>
+
+{% endblock %}
+
