@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django_summernote.admin import SummernoteModelAdmin
 
 from .models import Level, Code
 
@@ -7,8 +8,9 @@ class CodeInline(admin.TabularInline):
 
 
 @admin.register(Level)
-class LevelAdmin(admin.ModelAdmin):
+class LevelAdmin(SummernoteModelAdmin):
     list_display = ('depth', 'content_length')
+    summernote_fields = ('content',)
     inlines = [
         CodeInline
     ]

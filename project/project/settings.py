@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+    'django_summernote',
     'quest'
 ]
 
@@ -92,3 +93,5 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
