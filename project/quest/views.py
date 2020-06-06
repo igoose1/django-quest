@@ -20,14 +20,23 @@ def load(request: HttpRequest, depth: int, signature: str):
 
 
 def view(request: HttpRequest, depth:int):
+    if request.method == 'POST':
+        for code in list(Code.objects.filter(level__depth=depth)):
+            if code.is_match(request.POST['code']):
+                request.session['depth'] = depth
+                return redirect(f'/view/{depth}')
+        return HttpResponseForbidden()
+
     if request.session.get('depth', 0) < depth and request.user.is_anonymous:
         return HttpResponseForbidden('No rights to view this level.')
 
-    is_code_showing = request.session.get('depth', 0) > depth or request.user.is_authenticated
+    is_code_showing = request.session.get('depth', 0) > depth
+    is_code_showing |= request.user.is_authenticated
+    is_code_showing &= Level.objects.order_by('depth').last().depth > depth
     with transaction.atomic():
         level = Level.objects.get(depth=depth)
         code = Code.objects.filter(
-            level=level
+            level__depth=depth + 1
         ).first().string if is_code_showing else ''
         content = level.content
         progress = Level.objects.filter(
@@ -47,7 +56,8 @@ def view(request: HttpRequest, depth:int):
         'content': content,
         'progress': progress,
         'loadlink': loadlink,
-        'title': title
+        'title': title,
+        'depth': depth
     }
         
     return render(request, 'view.html', context)

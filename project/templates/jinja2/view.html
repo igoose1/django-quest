@@ -7,10 +7,10 @@
 
 	<div id="content"><p>{{ content }}</p></div>
 
-	<div id="code_input">
+	<form action="/view/{{ depth + 1}}/" method="post" id="code_input">
 		<input type="text" id="code" name="code" value="{{ code }}">
 		<input type="submit" value="Погняли!🚀">
-	</div>
+	</form>
 
 	<hr>
 	<div id="progress">
