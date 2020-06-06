@@ -25,7 +25,7 @@ def view(request: HttpRequest, depth:int):
             if code.is_match(request.POST['code']):
                 request.session['depth'] = depth
                 return redirect(f'/view/{depth}')
-        return HttpResponseForbidden()
+            return redirect(f'/view/{depth - 1}')
 
     if request.session.get('depth', 0) < depth and request.user.is_anonymous:
         return HttpResponseForbidden('No rights to view this level.')
@@ -45,7 +45,7 @@ def view(request: HttpRequest, depth:int):
         loadlink = reverse(
             load,
             kwargs={
-                'depth': depth,
+                'depth': request.session.get('depth', 0),
                 'signature': level.generate_signature()
             }
         )
