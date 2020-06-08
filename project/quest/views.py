@@ -3,7 +3,28 @@ from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect, render
 from django.db import transaction
 
+import random
+
 from quest.models import Level, Code
+
+
+def start(request: HttpRequest):
+    context = {
+        'loadlink': Level.objects.first().loadlink
+    }
+    return render(request, 'start.html', context)
+
+def end(request: HttpRequest):
+    if request.session.get('depth', 0) < Level.objects.last().depth:
+        return HttpResponseForbidden('You haven\'t solved quest yet.')
+    EMOJIS = '🥳🎂🎉🎊 '
+    context = {
+        'emojis': ''.join(
+            [random.choice(EMOJIS) for _ in range(random.randint(100, 5000))]
+        )
+    }
+    return render(request, 'end.html', context=context)
+
 
 
 def load(request: HttpRequest, depth: int, signature: str):
@@ -29,6 +50,9 @@ def view(request: HttpRequest, depth:int):
         if level.is_passed(user_input):
             depth += 1
             request.session['depth'] = depth
+            if depth >= Level.objects.last().depth:
+                return redirect('/end/')
+            print(depth, Level.objects.last().depth)
             level = Level.objects.get(depth=depth)
         else:
             is_user_wrong = True

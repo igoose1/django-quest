@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} Начало {% endblock %}
+
+{% block content %}
+	<h1>Начало</h1>
+
+	<div class="content">
+		<p>
+			Всё, что надо знать перед началом: для каждого запуска используй 
+			ракету!
+		</p>
+		<p>
+			Готова? Тыкай ракету и полетели!
+		</p>
+	</div>
+
+	<div class="startbutton">
+		<p>
+			<form action="{{ loadlink }}" method="get" id="code_input">
+				<input type="submit" value="🚀" class="rocket">
+			</form>
+		</p>
+	</div>
+{% endblock %}
+
