@@ -13,7 +13,7 @@ SECRET_KEY = local_settings.SECRET_KEY
 
 DEBUG = local_settings.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
