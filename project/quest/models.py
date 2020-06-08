@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from django.core import signing
 
 from Levenshtein import distance
@@ -22,6 +23,15 @@ class Level(models.Model):
             self.signer.unsign(f'{self.depth}:{user_signature}')
         except signing.BadSignature: 
             return True
+        return False
+
+    def is_passed(self, user_input: str):
+        codes = apps.get_model('quest', 'Code').objects.filter(
+            level__depth=self.depth
+        )
+        for code in codes:
+            if code.is_match(user_input):
+                return True
         return False
 
     class Meta:

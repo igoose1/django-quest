@@ -16,16 +16,23 @@ def load(request: HttpRequest, depth: int, signature: str):
         return HttpResponseForbidden('Bad signature.')
 
     request.session['depth'] = depth
-    return redirect(f'/view/{depth}')
+    return redirect(f'/view/{depth}/')
 
 
 def view(request: HttpRequest, depth:int):
+    user_input, is_user_wrong = None, False
+    try:
+        level = Level.objects.get(depth=depth)
+    except Level.DoesNotExist:
+        return HttpResponseNotFound()
     if request.method == 'POST':
-        for code in list(Code.objects.filter(level__depth=depth)):
-            if code.is_match(request.POST['code']):
-                request.session['depth'] = depth
-                return redirect(f'/view/{depth}')
-            return redirect(f'/view/{depth - 1}')
+        user_input = request.POST.get('code', '')
+        if level.is_passed(user_input):
+            depth += 1
+            request.session['depth'] = depth
+            level = Level.objects.get(depth=depth)
+        else:
+            is_user_wrong = True
 
     if request.session.get('depth', 0) < depth and request.user.is_anonymous:
         return HttpResponseForbidden('No rights to view this level.')
@@ -34,20 +41,16 @@ def view(request: HttpRequest, depth:int):
     is_code_showing |= request.user.is_authenticated
     is_code_showing &= Level.objects.order_by('depth').last().depth > depth
     with transaction.atomic():
-        level = Level.objects.get(depth=depth)
         code = Code.objects.filter(
-            level__depth=depth + 1
+            level=level
         ).first().string if is_code_showing else ''
         content = level.content
         progress = Level.objects.filter(
             depth__lte=request.session.get('depth', 0)
         ).order_by('depth').values_list('title', flat=True)
-        loadlink = reverse(
-            load,
-            kwargs={
-                'depth': request.session.get('depth', 0),
-                'signature': level.generate_signature()
-            }
+        loadlink = '/load/{depth}/{signature}/'.format(
+            depth=request.session.get('depth', 0),
+            signature=level.generate_signature()
         )
         title = level.title
 
@@ -57,7 +60,9 @@ def view(request: HttpRequest, depth:int):
         'progress': progress,
         'loadlink': loadlink,
         'title': title,
-        'depth': depth
+        'depth': depth,
+        'user_input': user_input,
+        'is_user_wrong': is_user_wrong
     }
         
     return render(request, 'view.html', context)
