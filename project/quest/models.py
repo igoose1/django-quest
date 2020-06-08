@@ -11,10 +11,6 @@ class Level(models.Model):
 
     signer = signing.Signer(sep=':', salt='load')
 
-    @property
-    def content_length(self):
-        return len(self.content)
-
     def generate_signature(self):
         return self.signer.signature(self.depth)
 
@@ -33,6 +29,13 @@ class Level(models.Model):
             if code.is_match(user_input):
                 return True
         return False
+
+    @property
+    def loadlink(self):
+        return '/load/{depth}/{signature}/'.format(
+            depth=self.depth,
+            signature=self.generate_signature()
+        )
 
     class Meta:
         ordering = ['depth']

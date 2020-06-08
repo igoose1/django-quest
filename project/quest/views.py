@@ -1,7 +1,6 @@
 from django.http import HttpRequest
 from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.db import transaction
 
 from quest.models import Level, Code
@@ -48,10 +47,10 @@ def view(request: HttpRequest, depth:int):
         progress = Level.objects.filter(
             depth__lte=request.session.get('depth', 0)
         ).order_by('depth').values_list('title', flat=True)
-        loadlink = '/load/{depth}/{signature}/'.format(
-            depth=request.session.get('depth', 0),
-            signature=level.generate_signature()
-        )
+        loadlink = Level.objects.get(
+            depth=request.session.get('depth', 0)
+        ).loadlink
+
         title = level.title
 
     context = {
