@@ -14,6 +14,7 @@ def start(request: HttpRequest):
     }
     return render(request, 'start.html', context)
 
+
 def end(request: HttpRequest):
     if request.session.get('depth', 0) < Level.objects.last().depth:
         return HttpResponseForbidden('You haven\'t solved quest yet.')
@@ -24,7 +25,6 @@ def end(request: HttpRequest):
         )
     }
     return render(request, 'end.html', context=context)
-
 
 
 def load(request: HttpRequest, depth: int, signature: str):
@@ -50,7 +50,7 @@ def view(request: HttpRequest, depth:int):
         if level.is_passed(user_input):
             depth += 1
             request.session['depth'] = depth
-            if depth >= Level.objects.last().depth:
+            if depth > Level.objects.last().depth:
                 return redirect('/end/')
             print(depth, Level.objects.last().depth)
             level = Level.objects.get(depth=depth)
