@@ -17,26 +17,39 @@
 
 	<h1>{{ title|e }}</h1>
 
-	<div class="content"><p>{{ content }}</p></div>
+	<div class="content">
+		<p>
+			{{ content }}
+		</p>
+	</div>
 
-	<form action="/view/{{ depth }}/" method="post" id="code_input">
-		<input type="text" id="code" name="code" value="{{ code }}">
-		<input type="submit" value="🚀">
-	</form>
-
-	<hr>
-	<div class="progress">
-		<p>Прогресс:
-		<ol>
-		{% for title in progress %}
-			<li><a href="../{{ loop.index }}">{{ title|e }}</a></li>
-		{% endfor %}
-		</ol>
+	<div>
+		<p>
+			<form action="/view/{{ depth }}/" method="post" id="code_input">
+				<input type="text" id="code" name="code" value="{{ code }}" class="code">
+				<input type="submit" value="🚀" class="rocket">
+			</form>
 		</p>
 	</div>
 
 	<hr>
-	<div class="load">Волшебная <a href="{{ loadlink }}">ссылочка</a> для подзагрузки прогресса.</div>
+	<div class="progress">
+		<p>
+			Прогресс:
+			<ol>
+				{% for title in progress %}
+					<li><a href="../{{ loop.index }}">{{ title|e }}</a></li>
+				{% endfor %}
+			</ol>
+		</p>
+	</div>
+
+	<hr>
+	<div class="load">
+		<p>
+			Волшебная <a href="{{ loadlink }}">ссылочка</a> для подзагрузки прогресса.
+		</p>
+	</div>
 
 {% endblock %}
 
