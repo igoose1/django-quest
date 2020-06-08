@@ -10,19 +10,22 @@ class CodeInline(admin.TabularInline):
 
 @admin.register(Level)
 class LevelAdmin(SummernoteModelAdmin):
-    list_display = ('depth', 'title', 'codes', 'content_html', 'loadlink')
+    list_display = ('name', 'content_html', 'codes', 'loadlink')
     summernote_fields = ('content',)
     inlines = [
         CodeInline
     ]
+
+    def content_html(self, obj):
+        return mark_safe(obj.content)
 
     def codes(self, obj):
         return '; '.join(
             Code.objects.filter(level=obj).values_list('string', flat=True)
         )
 
-    def content_html(self, obj):
-        return mark_safe(obj.content)
+    def name(self, obj):
+        return f'{obj.depth}. {obj.title}'
 
     def loadlink(self, obj):
         return mark_safe(
