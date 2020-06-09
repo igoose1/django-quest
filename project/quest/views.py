@@ -72,7 +72,9 @@ def view(request: HttpRequest, depth:int):
             depth__lte=request.session.get('depth', 0)
         ).order_by('depth').values_list('title', flat=True)
         loadlink = Level.objects.get(
-            depth=request.session.get('depth', 0)
+            depth=min(
+                request.session.get('depth', 0), Level.objects.last().depth
+            )
         ).loadlink
 
         title = level.title
