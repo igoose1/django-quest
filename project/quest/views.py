@@ -62,7 +62,6 @@ def view(request: HttpRequest, depth:int):
 
     is_code_showing = request.session.get('depth', 0) > depth
     is_code_showing |= request.user.is_authenticated
-    is_code_showing &= Level.objects.order_by('depth').last().depth > depth
     with transaction.atomic():
         code = Code.objects.filter(
             level=level
