@@ -1,0 +1,24 @@
+django-quest
+===
+
+The quest maker I've written for my sister's birthday
+
+To launch it you should be familiar with Django projects.
+
+	* pipenv install,
+
+	* edit and copy project/project/local_settings.py.example to
+	  project/project/local_settings.py,
+	
+	* manage.py migrate,
+
+	* create a superuser and run the server,
+
+	* enter in /admin as a superuser via web-browser,
+
+	* create quest levels (at least one is required) in an admin page,
+
+	* try to solve the quiz yourself and get gz emojis!
+
+Note: when you are logged as an admin you can jump between levels without
+requiring to solve them.
