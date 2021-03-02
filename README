@@ -1,9 +1,12 @@
 django-quest
-===
+============
 
-The quest maker I've written for my sister's birthday
+The quest maker I've written for my sister's birthday. Do you make a scavenger
+hunt and need to store tasks somewhere? You would like this project then!
 
-To launch it you should be familiar with Django projects.
+The application requires Python 3.7+ and Django.
+
+To create a game:
 
 	* pipenv install,
 
@@ -14,11 +17,15 @@ To launch it you should be familiar with Django projects.
 
 	* create a superuser and run the server,
 
-	* enter in /admin as a superuser via web-browser,
+	* enter in /admin via web-browser,
 
 	* create quest levels (at least one is required) in an admin page,
 
-	* try to solve the quiz yourself and get gz emojis!
+	* try to solve the quest and get gz emojis!
 
-Note: when you are logged as an admin you can jump between levels without
-requiring to solve them.
+Notes: when you are logged as an admin you can jump between levels without
+writing an answer, HTMLs are written in Russian but they are so simple that you
+can edit them yourself in a gamers' language.
+
+Contact with me at last commit author's email and read LICENSE file (it's
+Apache 2) if you need to be calm the code is free as in speech.
